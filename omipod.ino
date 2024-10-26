@@ -1,7 +1,7 @@
 /*
  *  This is work-in-progress proof-of-concept code for a many-to-many via broker network topology. Here we assume:
  *  1. Each pod will use this code (Arduino). You must edit the String podname line to indicate a different pod name fomatted as "/pod1", "/pod2", etc
- *  2. The broker.py code (Python3) is running on a computer whose IP is entered below in the udpAddress line
+ *  2. The broker.py code (Python3) is running on a computer whose IP is entered below in the udpAddress line and that must contain the /pod(s) entered here.
  *  3. The client.scd code is running (SuperCollider) correctly (see the setup in the client.scd document) 
  *
  */
@@ -12,21 +12,21 @@ unsigned long myTime;
 
 // -- SETUP -- MUST BE EDITED FOR NETWORK IP AND POD NUMBER
 
+// -- Edit the podname variable and be sure that name appears in the broker.py document in the list of pods. If necessary, add it there.
 String podname = "/pod1";
-// WiFi network name and password:
+
+// WiFi network name and password. For a network that does not require a password, leave an empty string.
 const char * networkName = "yale wireless"; // ESP32 Devkits cannot connect to 5G wireless... must use 2 GHz 
 const char * networkPswd = "";
 
-//IP address to send UDP data to:
-// either use the ip address of the server or 
-// a network broadcast address
+// -- IP address to send UDP data to: either use the ip address of the server or a network broadcast address
 // const char * udpAddress = "10.0.0.137"; // double check the IP address of the machine running the Python script
 const char * udpAddress = "10.66.213.19"; // double check the IP address of the machine running the Python script
 const int udpPort = 5001; // double check the port too :)
 
 // -- END SETUP --
 
-//Are we currently connected?
+// Boolean to store connection status
 boolean connected = false;
 
 //The udp library class
@@ -50,13 +50,12 @@ void loop(){
   String send_data = podname + " " + myTime + " " + String(s_light) + " " + String(s_other);
   //only send data when connected
   if(connected){
-    //Serial.println("Sent: " + send_data);  // To monitor what is being sent
-    //Send a packet
+    // Serial.println("Sent: " + send_data);  // Uncomment to monitor what is being sent
     udp.beginPacket(udpAddress,udpPort);
     udp.write((const uint8_t*)send_data.c_str(), send_data.length());
     udp.endPacket();
   }
-  //Wait for 1 millisecond
+  // Wait for n milliseconds
   delay(250);
 }
 

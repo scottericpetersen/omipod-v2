@@ -4,26 +4,27 @@ Topology: many-to-many pods (Arduino) to clients (SuperCollider via a broker (Py
 
 */
 
+// -- Variables to store pods you wish to receive data from. Can have multiple.
 ~pod_name = "/pod1";
 ~pod_name2 = "/pod2";
 
+// -- The IP and port of the machine running the python broker.py program. Must use same port, here 9001
+n = NetAddr("10.66.213.19", 9001);
 
-//n = NetAddr("10.0.0.137", 9001); // python program @ home
-n = NetAddr("10.66.213.19", 9001); // python program @ yale
+// -- Register with the broker. Enter your (ie the client) IP and port. SC uses 57120 by default
+n.sendMsg('/register.', "/pod1", "10.66.213.19", 57120); 
+n.sendMsg('/register', "/pod2", "10.0.0.137", 57120); 
 
-n.sendMsg('/register.', "/pod1", "10.66.213.19", 57120); // mesg to register for sensor data
-n.sendMsg('/register', "/pod2", "10.0.0.137", 57120); // mesg to register for sensor data
-
-
+// -- A Simple OSCdef to print sensor data received along with time stamp, address of the broker, etc.
 (
 OSCdef(\pod1, {|msg, time, addr, recvPort| msg.postln }, ~pod_name);
 )
 
-(
-OSCdef(\pod2, {|msg, time, addr, recvPort| msg.postln }, ~pod_name2);
-)
+/* -- 2.2 -- Simple Sonification Demo for pods sending multiple streams of data
 
-// -- 2.2 -- Simple Sonification Demo
+Here, we assume ambient light sensors connected to the pod will have a functional range of ~150-4095.
+
+*/
 
 SynthDef(\plinky, {|freq=400| Out.ar(0, SinOsc.ar(freq).clip * Env.perc(0.01, 0.1, 0.1).kr(2)) }).add;
 
@@ -39,7 +40,7 @@ OSCdef(\pod1, {|msg, time, addr, recvPort|
 )
 
 
-// -- 2.1 -- Simple Sonification Demo
+// -- 2.1 -- Simple Sonification Demo for multiple pods with a single data point each
 
 SynthDef(\plinky, {|freq=400| Out.ar(0, SinOsc.ar(freq).clip * Env.perc(0.01, 0.1, 0.1).kr(2)) }).add;
 
