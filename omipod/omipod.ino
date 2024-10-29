@@ -23,7 +23,7 @@ const char* networkName = "yale wireless";  // ESP32 Devkits cannot connect to 5
 const char* networkPswd = "";
 
 // -- IP address to send UDP data to: either use the ip address of the server or a network broadcast address
-// const char * udpAddress = "10.0.0.137"; // double check the IP address of the machine running the Python script
+//const char * udpAddress = "10.0.0.137"; // double check the IP address of the machine running the Python script
 const char* udpAddress = "192.168.1.2";  // double check the IP address of the machine running the Python script
 const int udpPort = 5001;                // double check the port too :)
 
@@ -51,7 +51,7 @@ void loop() {
 
   if (curTime - prevTime >= del) {
     prevTime = curTime;
-    writeUDP();
+    writeUDP(curTime);
   }
 }
 
@@ -87,11 +87,11 @@ void WiFiEvent(WiFiEvent_t event) {
   }
 }
 
-void writeUDP() {
+void writeUDP(int time) {
 
   int s_light = analogRead(4);
   int s_other = analogRead(5);
-  String send_data = podname + " " + String(s_light) + " " + String(s_other);
+  String send_data = podname + " " + time + " " + String(s_light) + " " + String(s_other);
   // only send data when connected -- could this cause the delay?
   if (connected) {
     // Serial.println("Sent: " + send_data);  // Uncomment to monitor what is being sent

@@ -9,11 +9,11 @@ Topology: many-to-many pods (Arduino) to clients (SuperCollider via a broker (Py
 ~pod_name2 = "/pod2";
 
 // -- The IP and port of the machine running the python broker.py program. Must use same port, here 9001
-n = NetAddr("192.168.1.2", 9001);
+n = NetAddr("10.0.0.137", 9001);
 
 // -- Register with the broker. Enter your (ie the client) IP and port. SC uses 57120 by default
 n.sendMsg('/register.', "/pod1", "10.66.213.19", 57120);
-n.sendMsg('/register', "/pod2", "10.0.0.137", 57120);
+n.sendMsg('/register', "/pod1", "10.0.0.137", 57120);
 
 // -- A Simple OSCdef to print sensor data received along with time stamp, address of the broker, etc.
 (
