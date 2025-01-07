@@ -41,7 +41,8 @@ def process_esp32_data(data):
         # The remaining parts are the sensor data (could be multiple values)
         sensor_data = parts[1:]  # This will be a list of sensor values
 
-        # print(f"Pod: {pod_name}, Sensor Data: {sensor_data}")
+	# Print the incoming messages
+        print(f"Pod: {pod_name}, Sensor Data: {sensor_data}")
         
         if pod_name in pod_clients:
             # Convert the sensor data list back into a space-separated string or keep as a list

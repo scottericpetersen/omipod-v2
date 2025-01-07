@@ -1,6 +1,14 @@
 /* OMIPOD V2 WIP Proof-of-concept
 
-Topology: many-to-many pods (Arduino) to clients (SuperCollider via a broker (Python
+Topology: many-to-many pods (ESP32) to clients (PC + SuperCollider) via a broker (PC + Python)
+
+Message construction (data from ESP32):
+
+One long message with only \pod1 plus spaces for all the data
+
+or
+
+Individual messages named for the sensor, sent one after the next.
 
 */
 
