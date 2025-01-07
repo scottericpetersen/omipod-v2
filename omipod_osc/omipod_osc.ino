@@ -28,7 +28,7 @@ const int trig_pin = 7;
 // -- MILLIS VARIABLES --
 unsigned long prevTime = 0;
 unsigned long curTime;
-const long del = 10;  // every 250 milliseconds, send values
+const long del = 10;  // every 10 milliseconds, send values
 
 
 // -- SETUP -- MUST BE EDITED FOR NETWORK IP AND POD NUMBER
@@ -151,14 +151,7 @@ void writeUDP(int time) {
   }
   s_sound >>= 5;
 
-  // -- Format the sensor data and add the pod number for sending below via UDP
- // snprintf(dataBuffer, sizeof(dataBuffer), "%s %.1f %.1f %.1f %ld %.1f %d", pod_name, s_x, s_y, s_z, s_sound, s_range, s_light);
-
+  // -- Send data via OSC message
   OscWiFi.send(udpAddress, udpPort, pod_name, s_x, s_y, s_z, s_sound, s_range, s_light);
-  // if (connected) {
-  //   // Serial.println(dataBuffer);  // Uncomment to monitor what is being sent
-  //   udp.beginPacket(udpAddress, udpPort);
-  //   udp.write((const uint8_t*)dataBuffer, strlen(dataBuffer));
-  //   udp.endPacket();
-  // }
+
 }

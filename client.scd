@@ -2,13 +2,7 @@
 
 Topology: many-to-many pods (ESP32) to clients (PC + SuperCollider) via a broker (PC + Python)
 
-Message construction (data from ESP32):
 
-One long message with only \pod1 plus spaces for all the data
-
-or
-
-Individual messages named for the sensor, sent one after the next.
 
 */
 
@@ -27,6 +21,12 @@ n.sendMsg('/register', "/pod1", "10.0.0.137", 57120);
 (
 OSCdef(\pod1, {|msg, time, addr, recvPort| msg.postln }, ~pod_name);
 )
+
+(
+f = Array.new(48000);
+OSCdef(\pod1, {|msg, time, addr, recvPort| f = f.add(msg[4]); msg[4].postln; }, ~pod_name);
+)
+
 
 /* -- 2.2 -- Simple Sonification Demo for pods sending multiple streams of data
 
